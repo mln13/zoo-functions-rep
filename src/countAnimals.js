@@ -15,9 +15,9 @@ function countAnimals(animal) {
   const identifySpecies = data.species.find((animalType) => animal.specie
     .includes(animalType.name));
   const counting = identifySpecies.residents
-    .reduce((count, animalNumber) => (animalNumber.sex
-      .includes(animal.sex) ? count + 1 : count), 0);
+    .reduce((count, animalNumber) => (animalNumber.sex === (animal.sex) ? count + 1 : count), 0);
   return counting;
 }
 
+console.log(countAnimals({ specie: 'elephants', sex: 'male' }));
 module.exports = countAnimals;
