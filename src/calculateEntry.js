@@ -24,6 +24,4 @@ const calculateEntry = (entrants) => {
   return (priceToPay.toFixed(2) * 1);
 };
 
-console.log(calculateEntry({}));
-
 module.exports = { calculateEntry, countEntrants };

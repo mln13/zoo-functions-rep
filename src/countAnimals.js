@@ -19,5 +19,4 @@ function countAnimals(animal) {
   return counting;
 }
 
-console.log(countAnimals({ specie: 'elephants', sex: 'male' }));
 module.exports = countAnimals;

@@ -8,6 +8,4 @@ const getEmployeeByName = (employeeName) => {
   return findName;
 };
 
-console.log(getEmployeeByName(''));
-
 module.exports = getEmployeeByName;
