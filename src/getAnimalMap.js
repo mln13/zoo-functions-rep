@@ -1,18 +1,53 @@
-// const data = require('../data/zoo_data');
+const data = require('../data/zoo_data');
 
-// function getAnimalMap(options) {
+function getAnimalMapWithoutOptions(acc, byLocal, options) {
+  const result = {
+    ...acc,
+    [byLocal.location]: [...(acc[byLocal.location] || []), byLocal.name],
+  };
+  return result;
+}
+function filterSexnSort(options, byLocal) {
+  const filterBySex = byLocal.residents.filter((resident) => resident.sex.includes(options.sex));
+  const filterByName = filterBySex.map((nameAnimals) => nameAnimals.name);
+  if (options.sorted) {
+    return filterByName.sort();
+  }
+  return filterByName;
+}
 
-//   const entireList = data.species.reduce((acc, eachAnimal) => {
-//     acc[eachAnimal.location].push(eachAnimal.name);
-//     return acc;
-//   },
-//     { NE: [], NW: [], SE: [], SW: [] });
+function getAnimalMapWithSexnSort(acc, byLocal, options) {
+  const result = {
+    ...acc,
+    [byLocal.location]: [...(acc[byLocal.location] || []),
+      { [byLocal.name]: filterSexnSort(options, byLocal) }],
+  };
+  return result;
+}
+function getAnimalMapWithNames(acc, byLocal, options) {
+  const result = {
+    ...acc,
+    [byLocal.location]: [...(acc[byLocal.location] || []),
+      { [byLocal.name]: byLocal.residents.reduce((acm, anima) => {
+        if (options.sorted) {
+          return acm.concat(anima.name).sort();
+        }
+        return acm.concat(anima.name);
+      }, []) }],
+  };
+  return result;
+}
 
-//   const listBySex = entireList.filter((filterBySex) => filterBySex.residents.sex)
-// }
+function getAnimalMap(options) {
+  return data.species.reduce((acc, byLocal) => {
+    if (!options || !options.includeNames) {
+      return getAnimalMapWithoutOptions(acc, byLocal, options);
+    }
+    if (options.sex) {
+      return getAnimalMapWithSexnSort(acc, byLocal, options);
+    }
+    return getAnimalMapWithNames(acc, byLocal, options);
+  }, {});
+}
 
-// data.species.residents.find((bySex) => bySex.sex.includes(options.sex))
-// data.species.reduce((acc, byName) => acc[byName.location].push(byName.name), { NE: [], NW: [], SE: [], SW: [] })
-
-// console.log(getAnimalMap());
-// module.exports = getAnimalMap;
+module.exports = getAnimalMap;
